@@ -14,7 +14,16 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y l
 
 ## [No publicado]
 
-Nada todavía.
+### Cambiado
+
+- **Orden común en «Configuración».** Las cuatro aplicaciones de la familia presentan ahora las
+  secciones en el mismo orden: **Recepción de SMS**, **Fiabilidad en segundo plano**, la sección
+  propia del destino, **Límites**, **Envío y reintentos** y **Copia de seguridad**. Quien salta de
+  una a otra encuentra lo mismo en el mismo sitio.
+
+- **La sección del bot ya no va primera**, sino tercera, donde las otras tres ponen su destino.
+  Que sea el único ajuste que una instalación nueva trae vacío lo siguen diciendo el subtítulo de
+  la pantalla y el aviso del panel.
 
 ---
 

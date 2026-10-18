@@ -7,7 +7,8 @@
     algún día cambia uno, tienen que cambiar los dos.
 
     El color es lo que identifica a esta aplicación de un vistazo, y por eso ha cambiado dos
-    veces por el mismo motivo. SMSGateway era azul #1565C0; SMStoSMS pasó a verde azulado
+    veces por el mismo motivo. SMSGateway era azul #1565C0 —hoy es violeta, porque entrega a una
+    API y no a una aplicación de mensajería—; SMStoSMS pasó a verde azulado
     porque las dos podían convivir en el mismo teléfono; SMStoTelegram vuelve a la familia azul
     —la de Telegram— porque es la que dice a dónde entrega, y porque con el teal sería
     indistinguible de SMStoSMS en el lanzador, que es justo el problema que el teal resolvía.
