@@ -12,9 +12,27 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y l
 
 ---
 
-## [No publicado]
+## [1.1.0] - 2026-10-17
+
+### Añadido
+
+- **Copiar una entrada del registro con una pulsación larga.** Copia la misma línea que escribe
+  el fichero exportado —fecha, tipo y detalle—, para pegarla en un correo o en un parte de
+  incidencia sin tener que exportar el registro entero. El aviso se enseña hasta Android 12;
+  desde Android 13 lo saca el propio sistema, con vista previa de lo copiado, y poner otro encima
+  serían dos avisos de lo mismo.
 
 ### Cambiado
+
+- **«Ignorar mayúsculas» viene activado en las reglas nuevas.** Es lo contrario de lo que parece
+  prudente y es lo que pide la práctica: el mismo remitente escribe «CODIGO», «Codigo» o «codigo»
+  según el operador y el día, y una regla que distinga deja de casar sin dar ningún error —no
+  falla, simplemente no reenvía—. Distinguir mayúsculas pasa a ser la excepción, y se pide
+  apagando el interruptor que ya existía en la pantalla de la regla.
+
+  **Las reglas ya guardadas no cambian.** Conservan el criterio que tuvieran: cambiárselo por
+  detrás alteraría en silencio lo que casan en un teléfono que ya está funcionando. Esto solo
+  afecta a las reglas que se creen a partir de ahora.
 
 - **Orden común en «Configuración».** Las cuatro aplicaciones de la familia presentan ahora las
   secciones en el mismo orden: **Recepción de SMS**, **Fiabilidad en segundo plano**, la sección

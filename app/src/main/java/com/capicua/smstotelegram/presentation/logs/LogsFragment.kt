@@ -5,7 +5,11 @@
 
 package com.capicua.smstotelegram.presentation.logs
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +21,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.capicua.smstotelegram.R
 import com.capicua.smstotelegram.databinding.FragmentLogsBinding
+import com.capicua.smstotelegram.domain.model.LogEntry
 import com.capicua.smstotelegram.domain.model.LogTipo
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -41,13 +47,35 @@ class LogsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = LogsAdapter()
+        adapter = LogsAdapter(alMantenerPulsado = ::copiarAlPortapapeles)
         binding.recyclerViewLogs.adapter = adapter
 
         configurarChips()
         configurarExportar()
         configurarLimpiar()
         observarLogs()
+    }
+
+    /**
+     * Copia una entrada del registro al portapapeles. La engancha la pulsación larga sobre la
+     * fila, que es donde la busca quien quiere pegar un error en un correo o en un parte de
+     * incidencia: lo que se copia es **la misma línea** que escribe el fichero exportado.
+     *
+     * El aviso solo se enseña hasta Android 12. Desde Android 13 el sistema saca el suyo al
+     * escribir en el portapapeles —con una vista previa de lo copiado— y añadir un Snackbar
+     * encima deja dos avisos de lo mismo tapándose el uno al otro.
+     */
+    private fun copiarAlPortapapeles(log: LogEntry) {
+        val portapapeles = requireContext()
+            .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        portapapeles.setPrimaryClip(
+            ClipData.newPlainText(getString(R.string.logs_copiado_etiqueta), viewModel.comoLinea(log))
+        )
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            Snackbar.make(binding.root, R.string.logs_copiado, Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     private fun configurarChips() {

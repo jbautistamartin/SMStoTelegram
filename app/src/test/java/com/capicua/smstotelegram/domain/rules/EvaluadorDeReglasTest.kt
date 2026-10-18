@@ -210,7 +210,7 @@ class EvaluadorDeReglasTest {
     }
 
     @Test
-    fun `por defecto se distinguen mayusculas y minusculas`() {
+    fun `con el ajuste apagado se distinguen mayusculas y minusculas`() {
         val resultado = evaluar(listOf(regla(regexMensaje = "CODIGO")), mensaje = "tu codigo es 4821")
 
         assertFalse(resultado.hayCoincidencias)
@@ -395,7 +395,27 @@ class EvaluadorDeReglasTest {
     // ── Ignorar mayúsculas ───────────────────────────────────────────────────
 
     @Test
-    fun `por defecto las expresiones distinguen mayusculas`() {
+    fun `una regla nueva ignora mayusculas sin que nadie lo pida`() {
+        // El valor por defecto del modelo, que es lo que estrena una regla recien creada: el
+        // mismo remitente escribe «CODIGO» o «codigo» segun el dia, y una regla que distinga
+        // deja de casar sin dar ningun error. Este test existe para que ese valor no se
+        // cambie por descuido al tocar el data class.
+        val reglaRecienCreada = Regla(
+            id = 0,
+            orden = 0,
+            nombre = "Nueva",
+            regexMensaje = "hola",
+            destino = "+34600000001"
+        )
+
+        assertTrue(reglaRecienCreada.ignorarMayusculas)
+        assertTrue(
+            evaluar(listOf(reglaRecienCreada), mensaje = "HOLA que tal").hayCoincidencias
+        )
+    }
+
+    @Test
+    fun `con el ajuste apagado las expresiones distinguen mayusculas`() {
         val resultado = evaluar(
             listOf(regla(regexMensaje = "hola")),
             mensaje = "HOLA que tal"

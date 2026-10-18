@@ -67,9 +67,15 @@ class EditarReglaFragment : Fragment() {
         )
 
         if (esNueva) {
-            // Una regla nueva arranca con la plantilla por defecto y activa.
+            // Una regla nueva arranca con la plantilla por defecto, activa y sin distinguir
+            // mayúsculas. Lo de las mayúsculas es lo que casi nadie quiere: un SMS escribe
+            // «CODIGO», «Codigo» o «codigo» según el operador y el día, y una regla que
+            // distinga deja de casar sin que nada lo avise. Quien necesite distinguirlas lo
+            // apaga aquí, que es un interruptor a la vista; lo contrario era descubrirlo
+            // cuando una regla no disparaba.
             binding.editTextPlantilla.setText(Regla.PLANTILLA_POR_DEFECTO)
             binding.switchActiva.isChecked = true
+            binding.switchIgnorarMayusculas.isChecked = true
             cargaInicial = false
         }
 

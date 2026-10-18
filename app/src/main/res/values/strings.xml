@@ -24,6 +24,8 @@
 
     <!-- Logs -->
     <string name="logs_title">Logs del sistema</string>
+    <string name="logs_copiado">Entrada copiada al portapapeles</string>
+    <string name="logs_copiado_etiqueta">Registro de SMStoTelegram</string>
     <string name="logs_no_entries">Sin entradas de log</string>
     <string name="logs_limpiar">Limpiar</string>
     <string name="logs_filtro_reglas">Reglas</string>

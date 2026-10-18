@@ -17,7 +17,14 @@ import com.capicua.smstotelegram.domain.model.LogEntry
 import com.capicua.smstotelegram.domain.model.LogTipo
 import com.capicua.smstotelegram.util.toDisplayString
 
-class LogsAdapter : ListAdapter<LogEntry, LogsAdapter.LogViewHolder>(DiffCallback) {
+/**
+ * @param alMantenerPulsado se invoca al dejar el dedo sobre una entrada. El adaptador no copia
+ *   nada por su cuenta: el portapapeles y el aviso son cosa del fragment, que es quien tiene
+ *   contexto de ventana para enseñar un Snackbar.
+ */
+class LogsAdapter(
+    private val alMantenerPulsado: (LogEntry) -> Unit = {}
+) : ListAdapter<LogEntry, LogsAdapter.LogViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogViewHolder {
         val binding = ItemLogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -33,6 +40,13 @@ class LogsAdapter : ListAdapter<LogEntry, LogsAdapter.LogViewHolder>(DiffCallbac
 
         fun bind(log: LogEntry) {
             val ctx = binding.root.context
+
+            // Devuelve true para consumir el gesto: si no, el toque sigue vivo y la fila
+            // responde además como una pulsación normal al levantar el dedo.
+            binding.root.setOnLongClickListener {
+                alMantenerPulsado(log)
+                true
+            }
 
             binding.textViewTimestamp.text = log.timestamp.toDisplayString()
             binding.textViewDetalle.text   = log.detalle

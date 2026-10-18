@@ -13,7 +13,7 @@ sobre el remitente y el texto.
 > lo mismo con la entrada y reenvía como SMS a otro teléfono. Son aplicaciones **distintas**, con
 > `applicationId` propio y base de datos propia, y pueden convivir en el mismo dispositivo.
 
-**Versión actual: [v1.0.0](https://github.com/jbautistamartin/SMStoTelegram/releases/tag/v1.0.0)** —
+**Versión actual: [v1.1.0](https://github.com/jbautistamartin/SMStoTelegram/releases/tag/v1.1.0)** —
 descarga el APK firmado desde la
 [página de releases](https://github.com/jbautistamartin/SMStoTelegram/releases). No está en
 Google Play: `RECEIVE_SMS` pertenece a un grupo de permisos restringido cuya publicación exige

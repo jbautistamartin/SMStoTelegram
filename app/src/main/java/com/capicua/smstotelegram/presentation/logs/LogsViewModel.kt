@@ -77,26 +77,31 @@ class LogsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Una entrada como una sola línea de texto: la que se escribe en el fichero exportado y la
+     * que se copia al portapapeles con una pulsación larga.
+     *
+     * Es la **misma** función para los dos a propósito. Cuando eran dos trozos de código
+     * parecidos, lo copiado y lo exportado se parecían sin llegar a coincidir, y eso convierte
+     * en inútil el gesto de pegar una línea suelta en el mismo sitio donde está el fichero.
+     */
+    fun comoLinea(log: LogEntry): String = buildString {
+        append("[${FORMATO_FECHA.format(log.timestamp)}]")
+        append(" [${log.tipo.name.padEnd(14)}]")
+        log.smsId?.let { append(" [SMS: ${it.take(8)}…]") }
+        log.destino?.let { append(" [→ $it]") }
+        append(" ${log.detalle}")
+    }
+
     private fun generarArchivo(logs: List<LogEntry>): Uri {
         val context = getApplication<Application>()
-        val formatter = DateTimeFormatter
-            .ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            .withZone(ZoneId.systemDefault())
-
         val contenido = buildString {
             appendLine("=== SMStoTelegram — Registro exportado ===")
-            appendLine("Fecha exportación: ${formatter.format(Instant.now())}")
+            appendLine("Fecha exportación: ${FORMATO_FECHA.format(Instant.now())}")
             appendLine("Total entradas: ${logs.size}")
             appendLine("=".repeat(50))
             appendLine()
-            logs.forEach { log ->
-                append("[${formatter.format(log.timestamp)}]")
-                append(" [${log.tipo.name.padEnd(14)}]")
-                log.smsId?.let { append(" [SMS: ${it.take(8)}…]") }
-                log.destino?.let { append(" [→ $it]") }
-                append(" ${log.detalle}")
-                appendLine()
-            }
+            logs.forEach { log -> appendLine(comoLinea(log)) }
         }
 
         val nombreArchivo = "smstotelegram_logs_${System.currentTimeMillis()}.txt"
@@ -108,5 +113,12 @@ class LogsViewModel @Inject constructor(
             Constants.FILE_PROVIDER_AUTHORITY,
             archivo
         )
+    }
+
+    private companion object {
+        /** Fecha legible y ordenable, en la zona del teléfono: quien lee el registro está aquí. */
+        val FORMATO_FECHA: DateTimeFormatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            .withZone(ZoneId.systemDefault())
     }
 }
