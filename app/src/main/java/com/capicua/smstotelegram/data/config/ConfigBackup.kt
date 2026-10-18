@@ -25,11 +25,17 @@ import javax.inject.Singleton
 
 /** Cómo acabó una copia de seguridad. Lo traduce a texto la pantalla que la pidió. */
 sealed interface ResultadoCopia {
-    data class Exportada(val reglas: Int) : ResultadoCopia
+    /**
+     * @param conCredenciales si el fichero escrito lleva dentro el token del bot. La pantalla
+     *   lo usa para cambiar el mensaje final: una copia con token es un fichero que hay que
+     *   custodiar, y eso se dice al terminar y no solo antes.
+     */
+    data class Exportada(val reglas: Int, val conCredenciales: Boolean) : ResultadoCopia
     data class Importada(
         val aceptadas: Int,
         val rechazadas: Int,
-        val conAjustes: Boolean
+        val conAjustes: Boolean,
+        val conCredenciales: Boolean
     ) : ResultadoCopia
     data class Fallo(val motivo: String) : ResultadoCopia
 }
@@ -73,13 +79,16 @@ class ConfigBackup @Inject constructor(
     fun nombreFichero(): String = "smstotelegram-configuracion-${Instant.now().epochSecond}.json"
 
     /** Escribe los ajustes y el juego de reglas completo en el fichero elegido. */
-    suspend fun exportar(destino: Uri): ResultadoCopia = try {
+    suspend fun exportar(
+        destino: Uri,
+        incluirCredenciales: Boolean = false
+    ): ResultadoCopia = try {
         val reglas = reglaRepository.obtenerTodas()
         val contenido = json.encodeToString(
             ReglasExportadas.serializer(),
             ReglasExportadas(
                 exportado = Instant.now().toString(),
-                configuracion = configDataStore.config.first().aJson(),
+                configuracion = configDataStore.config.first().aJson(incluirCredenciales),
                 reglas = reglas.map { it.aJson() }
             )
         )
@@ -91,7 +100,7 @@ class ConfigBackup @Inject constructor(
                 ?: error("no se pudo abrir el fichero para escribir")
         }
 
-        ResultadoCopia.Exportada(reglas.size)
+        ResultadoCopia.Exportada(reglas.size, incluirCredenciales)
     } catch (e: Exception) {
         Timber.e(e, "Error exportando la configuración")
         ResultadoCopia.Fallo(e.message ?: "error al exportar")
@@ -128,8 +137,12 @@ class ConfigBackup @Inject constructor(
                     "así que esas reglas no servirían: hay que crearlas de nuevo"
             )
         } else {
-            // El token no viaja en el fichero y los ajustes se reemplazan: hay que
-            // devolverle el que ya tenía este teléfono o la importación lo borraría.
+            // Los ajustes se reemplazan, así que hay que pasarle el token que ya tenía este
+            // teléfono: si el fichero no lo trae —el caso normal— es el que se conserva, y sin
+            // él la importación lo borraría. Si el fichero sí lo trae, aDominio() usa el suyo.
+            val traeCredenciales =
+                fichero.configuracion?.tokenBot?.isNotBlank() ?: false
+
             fichero.configuracion?.let { importados ->
                 val tokenActual = configDataStore.config.first().tokenBot
                 configDataStore.guardar(importados.aDominio(tokenActual))
@@ -145,7 +158,8 @@ class ConfigBackup @Inject constructor(
             ResultadoCopia.Importada(
                 aceptadas = validas.size,
                 rechazadas = invalidas.size,
-                conAjustes = fichero.configuracion != null
+                conAjustes = fichero.configuracion != null,
+                conCredenciales = traeCredenciales
             )
         }
     } catch (e: Exception) {

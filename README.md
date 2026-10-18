@@ -13,7 +13,7 @@ sobre el remitente y el texto.
 > lo mismo con la entrada y reenvía como SMS a otro teléfono. Son aplicaciones **distintas**, con
 > `applicationId` propio y base de datos propia, y pueden convivir en el mismo dispositivo.
 
-**Versión actual: [v1.1.0](https://github.com/jbautistamartin/SMStoTelegram/releases/tag/v1.1.0)** —
+**Versión actual: [v1.2.0](https://github.com/jbautistamartin/SMStoTelegram/releases/tag/v1.2.0)** —
 descarga el APK firmado desde la
 [página de releases](https://github.com/jbautistamartin/SMStoTelegram/releases). No está en
 Google Play: `RECEIVE_SMS` pertenece a un grupo de permisos restringido cuya publicación exige
@@ -181,11 +181,11 @@ La vía corta si no vas a tocar el código:
 # Si el JDK del PATH es más nuevo que el 21
 export JAVA_HOME="/ruta/al/jdk-21"
 
-# Build debug
+# Compilación debug
 ./gradlew assembleDebug
 # APK → app/build/outputs/apk/debug/app-debug.apk
 
-# Build release (requiere claves de firma en local.properties; ver CLAUDE.md)
+# Compilación release (requiere claves de firma en local.properties; ver CLAUDE.md)
 ./gradlew assembleRelease
 # APK → app/build/outputs/apk/release/smstotelegram-<versionName>.apk
 ```

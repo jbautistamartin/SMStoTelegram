@@ -83,7 +83,11 @@
 
 
     <string name="settings_backup_titulo">Copia de seguridad</string>
-    <string name="settings_backup_aviso">Guarda en un fichero los ajustes y las reglas, para restaurarlos en este teléfono o clonarlos en otro. El fichero contiene los chats de destino: trátalo como información sensible. El token del bot no viaja en él.</string>
+    <string name="settings_backup_aviso">Guarda en un fichero los ajustes y las reglas, para restaurarlos en este teléfono o clonarlos en otro. El fichero contiene los chats de destino: trátalo como información sensible.</string>
+    <string name="settings_backup_credenciales">Incluir el token del bot</string>
+    <string name="settings_backup_credenciales_aviso">El fichero llevará el token del bot en texto plano. Quien lo abra podrá escribir en Telegram como tu bot y leer los chats a los que tenga acceso. Guárdalo como guardarías una contraseña: cifrado o en un sitio del que respondas, nunca en una carpeta compartida ni en el correo.</string>
+    <string name="settings_copia_exportada_credenciales">Copia guardada con el token · %1$d regla(s) · custodia el fichero</string>
+    <string name="settings_copia_importada_credenciales">Copia restaurada · %1$d regla(s) añadidas · se ha sustituido el token</string>
     <string name="settings_exportar">Exportar</string>
     <string name="settings_importar">Importar</string>
     <string name="settings_importar_confirmar">Los ajustes del fichero sustituyen a los actuales. Las reglas se añaden a las que ya hay, sin borrar ninguna.</string>

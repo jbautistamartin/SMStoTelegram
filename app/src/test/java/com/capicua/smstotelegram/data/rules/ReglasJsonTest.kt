@@ -165,21 +165,88 @@ class ReglasJsonTest {
      * preferencia: es lo que impide que una copia de seguridad reparta permiso para escribir en
      * nombre del bot.
      */
-    @Test
-    fun `el token del bot no aparece en el fichero exportado`() {
-        val config = AppConfig(tokenBot = "123456789:AAEhBOweik6ad9r_QXZ2Ql3n1xWcCOPvj8s")
+    private val conToken =
+        AppConfig(tokenBot = "123456789:AAEhBOweik6ad9r_QXZ2Ql3n1xWcCOPvj8s")
 
-        val serializado = json.encodeToString(
+    private fun exportar(config: AppConfig, incluirCredenciales: Boolean = false) =
+        json.encodeToString(
             ReglasExportadas.serializer(),
             ReglasExportadas(
                 exportado = "2026-10-12T20:00:00Z",
-                configuracion = config.aJson(),
+                configuracion = config.aJson(incluirCredenciales),
                 reglas = listOf(regla().aJson())
             )
         )
 
+    @Test
+    fun `por defecto el token del bot no aparece en el fichero exportado`() {
+        val serializado = exportar(conToken)
+
         assertFalse("el token no debe aparecer", serializado.contains("AAEhBOweik"))
-        assertFalse("ni su nombre de campo", serializado.contains("token"))
+        // El campo si sale, con valor null: el fichero dice explicitamente que no lleva
+        // secretos en vez de callarselo, que es mas facil de auditar de un vistazo.
+        assertTrue("el campo debe estar, a null", serializado.contains("\"token_bot\": null"))
+    }
+
+    /**
+     * El caso contrario, que es la razon de que exista el parametro: quien lo pide a sabiendas
+     * se lleva el token dentro, porque si no una copia no sirve para restaurar un telefono.
+     */
+    @Test
+    fun `si se pide, el token viaja en el fichero`() {
+        val serializado = exportar(conToken, incluirCredenciales = true)
+
+        assertTrue("el token debe aparecer", serializado.contains("AAEhBOweik"))
+    }
+
+    /**
+     * Un fichero sin token no puede dejar mudo al telefono que lo importa.
+     *
+     * Es el modo de fallo que justifica el parametro de [aDominio]: los ajustes se *reemplazan*
+     * al importar, asi que sin respaldo una copia normal borraria el token.
+     */
+    @Test
+    fun `importar sin token conserva el del telefono`() {
+        val recuperado = json.decodeFromString(
+            ReglasExportadas.serializer(),
+            exportar(conToken)
+        )
+
+        val importado = recuperado.configuracion!!.aDominio("999:YA-CONFIGURADO")
+
+        assertEquals("999:YA-CONFIGURADO", importado.tokenBot)
+    }
+
+    /** Y si el fichero lo trae, gana: es exactamente lo que se pidio al exportarlo. */
+    @Test
+    fun `importar con token sustituye el del telefono`() {
+        val recuperado = json.decodeFromString(
+            ReglasExportadas.serializer(),
+            exportar(conToken, incluirCredenciales = true)
+        )
+
+        val importado = recuperado.configuracion!!.aDominio("999:YA-CONFIGURADO")
+
+        assertEquals(conToken.tokenBot, importado.tokenBot)
+    }
+
+    /**
+     * Un token en blanco en el fichero cuenta como ausente.
+     *
+     * Sustituir un token que funciona por una cadena vacia es el peor de los dos resultados
+     * posibles: deja la aplicacion muda y sin rastro de por que. Pasa con un fichero exportado
+     * desde un telefono a medio configurar, que es un caso corriente.
+     */
+    @Test
+    fun `un token vacio en el fichero no pisa el que ya habia`() {
+        val recuperado = json.decodeFromString(
+            ReglasExportadas.serializer(),
+            exportar(AppConfig(tokenBot = ""), incluirCredenciales = true)
+        )
+
+        val importado = recuperado.configuracion!!.aDominio("999:YA-CONFIGURADO")
+
+        assertEquals("999:YA-CONFIGURADO", importado.tokenBot)
     }
 
     /**

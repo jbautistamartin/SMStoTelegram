@@ -372,6 +372,28 @@
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textColor="?attr/colorOnSurfaceVariant" />
 
+        <!-- Incluir el token es opcional y va apagado cada vez que se entra aqui: no es un
+             ajuste, es una decision sobre esta exportacion. El aviso solo aparece cuando se
+             enciende, porque un aviso permanente sobre algo que no esta pasando se deja de
+             leer y entonces tampoco se lee cuando si pasa. -->
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_incluir_credenciales"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:checked="false"
+            android:text="@string/settings_backup_credenciales" />
+
+        <TextView
+            android:id="@+id/text_credenciales_aviso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/settings_backup_credenciales_aviso"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textColor="?attr/colorError"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

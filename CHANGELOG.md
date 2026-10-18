@@ -12,6 +12,36 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y l
 
 ---
 
+## [1.2.0] - 2026-10-18
+
+### Añadido
+
+- **La copia de seguridad puede llevar el token del bot, si se pide.** Una casilla nueva en
+  Ajustes → Copia de seguridad, **apagada por defecto**, decide si el token viaja dentro del
+  fichero. Sin marcarla, el comportamiento es el de siempre y las copias antiguas se siguen
+  importando igual.
+
+  Hasta ahora el token nunca viajaba, y eso hacía que una copia no sirviese para lo que más
+  falta hace: restaurar un teléfono entero o clonar la configuración en otro. El precio es que
+  el fichero pasa a ser un secreto, así que la casilla enseña un aviso en rojo mientras está
+  encendida, y el mensaje de confirmación al terminar también lo dice —entre marcarla y elegir
+  carpeta se pasa por el selector del sistema, que es donde se decide dónde acaba el fichero—.
+
+  La casilla **no se recuerda**: vuelve a estar apagada cada vez que se entra en Ajustes. No es
+  un ajuste de la aplicación, es una decisión sobre esa exportación concreta, y dejarla
+  encendida de una vez para otra acabaría escribiendo el token en un fichero que alguien creía
+  inocuo.
+
+  Al importar, un token presente en el fichero sustituye al del teléfono y se avisa de ello; uno
+  ausente o en blanco deja el que hubiera, porque cambiar un token que funciona por nada deja la
+  aplicación muda sin rastro de por qué.
+
+### Documentación
+
+- **`CLAUDE.md` pasa íntegramente al español**, igual que el resto de la documentación del
+  proyecto y que los comentarios del código. Antes mezclaba estructura y encabezados en inglés
+  con las explicaciones largas en español.
+
 ## [1.1.0] - 2026-10-17
 
 ### Añadido

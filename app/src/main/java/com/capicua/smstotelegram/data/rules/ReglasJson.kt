@@ -93,12 +93,35 @@ data class ConfiguracionJson(
     @SerialName("intervalo_reintento_segundos") val intervaloReintentoSegundos: Int,
     @SerialName("timeout_envio_segundos") val timeoutEnvioSegundos: Int,
     @SerialName("max_reenvios_por_minuto") val maxReenviosPorMinuto: Int,
-    @SerialName("recepcion_activa") val recepcionActiva: Boolean = true
+    @SerialName("recepcion_activa") val recepcionActiva: Boolean = true,
+
+    /**
+     * El token del bot, **solo si quien exporta lo pidió expresamente**.
+     *
+     * Null es el valor normal y significa «esta copia no lo lleva». Se escribe como `null`
+     * explícito en lugar de omitirse, y eso es deliberado: quien abra el JSON ve de un vistazo
+     * que no hay secretos dentro, en vez de tener que saberse qué campos deberían estar.
+     *
+     * ## Por qué esto no sube la versión del formato
+     * Es un campo opcional que solo se añade. Un fichero sin él —todos los anteriores a esta
+     * función— se importa exactamente igual que antes: [aDominio] cae en el token que ya
+     * tuviera el teléfono. Y una versión vieja de la aplicación leyendo un fichero que sí lo
+     * lleva lo descarta por `ignoreUnknownKeys` y se queda con el suyo, que es el
+     * comportamiento seguro. Ninguna de las dos direcciones rompe nada.
+     */
+    @SerialName("token_bot") val tokenBot: String? = null
 )
 
-/** Convierte los ajustes a su forma exportable, dejando fuera lo que es de este teléfono. */
-fun AppConfig.aJson() = ConfiguracionJson(
+/**
+ * Convierte los ajustes a su forma exportable, dejando fuera lo que es de este teléfono.
+ *
+ * @param incluirCredenciales si el token del bot viaja en el fichero. **Por defecto no**, y
+ *   tiene que pedirlo expresamente quien exporta: el fichero es JSON en claro y el token es
+ *   permiso para escribir como el bot. La pantalla que lo ofrece se encarga de decirlo.
+ */
+fun AppConfig.aJson(incluirCredenciales: Boolean = false) = ConfiguracionJson(
     // Si algún campo de AppConfig no debe viajar, el sitio de omitirlo es aquí, no en quien llama.
+    tokenBot = tokenBot.takeIf { incluirCredenciales },
     maxReintentos = maxReintentos,
     intervaloReintentoSegundos = intervaloReintentoSegundos,
     timeoutEnvioSegundos = timeoutEnvioSegundos,
@@ -115,7 +138,10 @@ fun AppConfig.aJson() = ConfiguracionJson(
  * token. Es el mismo papel que tenía `simActual` cuando el transporte era el SMS.
  */
 fun ConfiguracionJson.aDominio(tokenActual: String) = AppConfig(
-    tokenBot = tokenActual,
+    // Si el fichero trae token, gana: es exactamente lo que se pidió al exportarlo. Un token
+    // en blanco cuenta como ausente, porque sustituir uno bueno por nada deja la aplicación
+    // muda y sin rastro de por qué.
+    tokenBot = tokenBot?.takeIf { it.isNotBlank() } ?: tokenActual,
     maxReintentos = maxReintentos,
     intervaloReintentoSegundos = intervaloReintentoSegundos,
     timeoutEnvioSegundos = timeoutEnvioSegundos,

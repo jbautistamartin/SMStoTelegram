@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -51,7 +52,11 @@ class SettingsFragment : Fragment() {
 
     private val crearFichero = registerForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
-    ) { uri: Uri? -> uri?.let { viewModel.exportar(it) } }
+    ) { uri: Uri? ->
+        // La casilla se lee aqui y no cuando se pulso el boton: entre una cosa y otra esta el
+        // selector de ficheros del sistema, y lo que vale es lo que este marcado al confirmar.
+        uri?.let { viewModel.exportar(it, binding.switchIncluirCredenciales.isChecked) }
+    }
 
     private val abrirFichero = registerForActivityResult(
         ActivityResultContracts.OpenDocument()
@@ -227,6 +232,12 @@ class SettingsFragment : Fragment() {
     // ── Copia de seguridad ────────────────────────────────────────────────────
 
     private fun configurarCopia() {
+        // El aviso solo se ensena con la casilla encendida: un texto en rojo permanente
+        // sobre algo que no esta ocurriendo se deja de leer, y entonces tampoco se lee cuando si.
+        binding.switchIncluirCredenciales.setOnCheckedChangeListener { _, marcado ->
+            binding.textCredencialesAviso.isVisible = marcado
+        }
+
         binding.buttonExportar.setOnClickListener {
             crearFichero.launch(viewModel.nombreFicheroCopia())
         }
@@ -249,13 +260,27 @@ class SettingsFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.copias.collect { resultado ->
                     val mensaje = when (resultado) {
-                        is ResultadoCopia.Exportada ->
-                            getString(R.string.settings_copia_exportada, resultado.reglas)
+                        is ResultadoCopia.Exportada -> when {
+                            // Que el fichero lleva el token se dice tambien al terminar, no
+                            // solo en el aviso de antes: entre marcar la casilla y elegir
+                            // donde guardar se pasa por el selector del sistema, y es ahi
+                            // donde se decide la carpeta que importa.
+                            resultado.conCredenciales -> getString(
+                                R.string.settings_copia_exportada_credenciales, resultado.reglas
+                            )
+                            else -> getString(
+                                R.string.settings_copia_exportada, resultado.reglas
+                            )
+                        }
 
                         is ResultadoCopia.Importada -> when {
                             resultado.rechazadas > 0 -> getString(
                                 R.string.settings_copia_importada_con_rechazos,
                                 resultado.aceptadas, resultado.rechazadas
+                            )
+                            resultado.conCredenciales -> getString(
+                                R.string.settings_copia_importada_credenciales,
+                                resultado.aceptadas
                             )
                             else -> getString(
                                 R.string.settings_copia_importada, resultado.aceptadas
