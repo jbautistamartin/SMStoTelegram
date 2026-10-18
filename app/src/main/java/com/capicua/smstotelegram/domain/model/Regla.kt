@@ -49,8 +49,19 @@ data class Regla(
      * Equivale a anteponer `(?i)` a las dos expresiones, pero sin tener que conocer el
      * modificador ni acordarse de ponerlo en ambas. Si además se escribe `(?i)` a mano, no
      * pasa nada: el resultado es el mismo.
+     *
+     * **Por defecto true**, que es lo contrario de lo que parece prudente y es lo que la
+     * práctica pide: el mismo remitente escribe «CODIGO», «Codigo» o «codigo» según el
+     * operador y el día, y una regla que distinga mayúsculas deja de casar sin que nada lo
+     * avise —no hay error, simplemente no reenvía—. Distinguirlas es la excepción, y se pide
+     * apagando el interruptor de la pantalla de la regla.
+     *
+     * Ojo: esto es el valor de una regla **nueva**. Las reglas ya guardadas conservan el que
+     * tuvieran, y las que existían antes de que la columna apareciera siguen con `false`
+     * —ver la migración v1 → v2—, porque cambiarles el criterio por detrás alteraría lo que
+     * casan en una instalación que ya funciona.
      */
-    val ignorarMayusculas: Boolean = false,
+    val ignorarMayusculas: Boolean = true,
 
     /**
      * Chat de Telegram que recibe el mensaje si la regla casa.
