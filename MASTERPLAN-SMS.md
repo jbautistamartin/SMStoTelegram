@@ -2,7 +2,7 @@
 
 > **Este documento es historia, no el plan vigente.** Describe la migración de SMSGateway a
 > SMStoSMS, dos aplicaciones anteriores a esta. El plan de SMStoTelegram está en
-> [`MASTERPLAN_TELEGRAM.md`](MASTERPLAN_TELEGRAM.md).
+> [`MASTERPLAN-TELEGRAM.md`](MASTERPLAN-TELEGRAM.md).
 >
 > Se conserva porque explica por qué la arquitectura es como es —el patrón outbox, la
 > idempotencia de cliente, el rescate de huérfanos, el encolado centralizado— y buena parte de

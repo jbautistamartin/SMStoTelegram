@@ -1,6 +1,6 @@
 # MASTERPLAN — SMStoSMS → SMStoTelegram
 
-> `MASTERPLAN.md` recoge la migración anterior, **SMSGateway → SMStoSMS**, y sigue siendo la
+> `MASTERPLAN-SMS.md` recoge la migración anterior, **SMSGateway → SMStoSMS**, y sigue siendo la
 > referencia de por qué la arquitectura es como es. Este documento recoge la siguiente:
 > cambiar el **medio de salida** sin tocar la tubería.
 

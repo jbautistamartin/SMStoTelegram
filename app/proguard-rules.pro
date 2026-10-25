@@ -15,7 +15,7 @@
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
 
 # Room: la implementación generada de la base de datos y las entidades.
--keep class * extends androidx.room.RoomDatabase
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
 -keep @androidx.room.Entity class *
 -dontwarn androidx.room.paging.**
 
@@ -28,4 +28,4 @@
 }
 
 # Fragments instanciados por nombre desde el grafo de navegación.
--keep class com.capicua.smstotelegram.presentation.** extends androidx.fragment.app.Fragment
+-keep class com.capicua.smstotelegram.presentation.** extends androidx.fragment.app.Fragment { <init>(); }

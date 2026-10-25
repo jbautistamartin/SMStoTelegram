@@ -12,6 +12,24 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y l
 
 ---
 
+## [No publicado]
+
+### Cambiado
+
+- **Toolchain al día.** AGP 8.5.2 → 9.4.1, Kotlin 2.0.21 → 2.4.21, KSP 2.3.12, Gradle 9.3.0 →
+  9.8.2, Hilt 2.60.1, Room 2.8.5, WorkManager 2.12.0 y el resto de dependencias a su última
+  versión estable. `compileSdk` pasa a 37; `targetSdk` sigue en 35, así que el
+  comportamiento en el teléfono no cambia. Para compilar hace falta **Temurin 25** y la
+  **plataforma 37** del SDK. Se hizo a la vez en las cuatro aplicaciones de la familia.
+
+### Documentación
+
+- **`MASTERPLAN-GATEWAY.md`**, escrito a posteriori: el origen de SMSGateway y de la tubería que
+  heredaron las otras tres. Lo llevan las cuatro, para que todas tengan la misma estructura de
+  planes.
+- Los enlaces a los masterplanes apuntaban a `MASTERPLAN.md` y `MASTERPLAN_TELEGRAM.md`, que ya no
+  existen con ese nombre.
+
 ## [1.2.0] - 2026-10-18
 
 ### Añadido
