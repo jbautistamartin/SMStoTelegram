@@ -1,5 +1,10 @@
 # SMStoTelegram
 
+> **⚠ SMStoTelegram está descontinuada.** La 1.3.0 es su última versión. La aplicación sigue en
+> **[SMSRelay](https://github.com/jbautistamartin/SMSRelay)**, que junta las cuatro de la familia y
+> reenvía por WhatsApp, Telegram, SMS o una API REST, eligiendo el canal en cada regla. SMSRelay
+> importa la copia de seguridad de SMStoTelegram tal cual.
+
 [![Última versión](https://img.shields.io/github/v/release/jbautistamartin/SMStoTelegram?label=descargar&color=2E7D32)](https://github.com/jbautistamartin/SMStoTelegram/releases/latest)
 [![Licencia](https://img.shields.io/badge/licencia-LGPL--2.1-blue)](LICENSE)
 [![Donar con PayPal](https://img.shields.io/badge/Donar-PayPal-00457C?logo=paypal&logoColor=white)](https://paypal.me/jbautistamartin)

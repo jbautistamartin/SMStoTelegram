@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 > del código. La línea de arriba se conserva en inglés porque es la cabecera estándar que
 > identifica el fichero.
 
+## Descontinuada
+
+**La 1.3.0 (25 oct 2026) es la última versión.** SMStoTelegram sigue en SMSRelay (decisión D de su `MASTERPLAN-RELAY.md`): la tarjeta «Esta aplicación está descontinuada», la primera de «Acerca de», lo dice y enlaza la descarga. Un arreglo de la tubería común ya no tiene que llegar aquí; solo queda archivar el repositorio.
+
 ## Comandos de compilación y ejecución
 
 > **Toolchain:** el código se compila para JVM 17 con AGP 9.4.1 sobre Gradle 9.8.2, y Gradle se

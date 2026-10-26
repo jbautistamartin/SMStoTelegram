@@ -110,6 +110,9 @@
     <string name="about_empresa">Capicua</string>
     <string name="about_autor">José Luis Bautista Martín</string>
     <string name="about_descripcion">Recibe SMS en este dispositivo y los entrega automáticamente en Telegram —a una persona, un grupo o un canal— a través de un bot propio, según reglas con expresiones regulares sobre el remitente y el texto.</string>
+    <string name="about_descontinuada_titulo">Esta aplicación está descontinuada</string>
+    <string name="about_descontinuada_detalle">SMStoTelegram no tendrá más versiones. Sigue en SMSRelay, que hace lo mismo y además reenvía por WhatsApp, Telegram, SMS o una API REST, cada regla por el canal que elija.\n\nPara pasarte: exporta la copia de seguridad en Ajustes, instala SMSRelay e impórtala allí; tus reglas entran solas. Después apaga la recepción aquí: con las dos activas, cada SMS saldría dos veces.</string>
+    <string name="about_descontinuada_boton">Descargar SMSRelay</string>
     <string name="about_marcadores_titulo">Marcadores de la plantilla</string>
     <string name="about_marcadores_detalle">{mensaje}   → texto del SMS\n{telefono}  → remitente del SMS\n{fecha}     → fecha de recepción, en hora local\n\nConviene dejar {telefono} y {fecha} en la plantilla: en Telegram todos los avisos llegan del mismo bot, y sin ellos no se sabe de quién era cada SMS.</string>
     <string name="about_privacidad_titulo">Aviso de privacidad</string>

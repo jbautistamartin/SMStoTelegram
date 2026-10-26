@@ -14,6 +14,20 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y l
 
 ## [No publicado]
 
+---
+
+## [1.3.0] - 2026-10-25
+
+**Última versión.** SMStoTelegram queda descontinuada: sigue en
+[SMSRelay](https://github.com/jbautistamartin/SMSRelay), que junta las cuatro aplicaciones de la
+familia y reenvía por WhatsApp, Telegram, SMS o una API REST, eligiendo el canal en cada regla.
+SMSRelay importa la copia de seguridad de esta aplicación tal cual.
+
+### Añadido
+
+- **Aviso de aplicación descontinuada** en «Acerca de», el primero de la pantalla, con un botón
+  que abre la descarga de SMSRelay y los pasos para pasarse sin perder las reglas.
+
 ### Cambiado
 
 - **Toolchain al día.** AGP 8.5.2 → 9.4.1, Kotlin 2.0.21 → 2.4.21, KSP 2.3.12, Gradle 9.3.0 →
