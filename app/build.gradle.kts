@@ -2,7 +2,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.navigation.safeargs)
@@ -33,7 +32,7 @@ ksp {
 
 android {
     namespace = "com.capicua.smstotelegram"
-    compileSdk = 35
+    compileSdk = 37
 
     signingConfigs {
         if (hayFirmaRelease) {
@@ -50,8 +49,8 @@ android {
         applicationId = "com.capicua.smstotelegram"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.2.0"
+        versionCode = 5
+        versionName = "1.3.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -67,14 +66,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            android.applicationVariants.all {
-                if (buildType.name == "release") {
-                    outputs.all {
-                        (this as? com.android.build.gradle.internal.api.BaseVariantOutputImpl)
-                            ?.outputFileName = "smstotelegram-${versionName}.apk"
-                    }
-                }
-            }
         }
         debug {
             isDebuggable = true
@@ -87,13 +78,28 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
     buildFeatures {
         viewBinding = true
         buildConfig = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+
+// El APK de release se llama smstotelegram-<versionName>.apk. AGP 9 retiró la API de
+// variantes antigua (applicationVariants) y la nueva no expone el nombre del fichero,
+// así que se recurre a VariantOutputImpl, que es interna: si una versión futura de
+// AGP la cambia, el síntoma es que el APK vuelve a llamarse app-release.apk.
+androidComponents {
+    onVariants(selector().withBuildType("release")) { variant ->
+        variant.outputs.forEach { salida ->
+            (salida as? com.android.build.api.variant.impl.VariantOutputImpl)
+                ?.outputFileName?.set("smstotelegram-${salida.versionName.orNull}.apk")
+        }
     }
 }
 

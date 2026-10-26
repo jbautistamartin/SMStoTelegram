@@ -48,6 +48,7 @@ class AboutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.textVersion.text = "Versión ${BuildConfig.VERSION_NAME}"
         binding.buttonProyecto.setOnClickListener { abrirEnlace(URL_PROYECTO) }
+        binding.buttonSmsrelay.setOnClickListener { abrirEnlace(URL_SMSRELAY) }
         binding.buttonDonativo.setOnClickListener { abrirEnlace(URL_DONATIVO) }
         configurarActualizaciones()
     }
@@ -179,6 +180,9 @@ class AboutFragment : Fragment() {
     private companion object {
         /** Página del proyecto: el código, los cambios y los APK publicados. */
         const val URL_PROYECTO = "https://github.com/jbautistamartin/SMStoTelegram"
+
+        /** Adónde sigue la aplicación: esta es su última versión. */
+        const val URL_SMSRELAY = "https://github.com/jbautistamartin/SMSRelay/releases/latest"
 
         /** Enlace del donativo que se abre desde «Acerca de». */
         const val URL_DONATIVO = "https://paypal.me/jbautistamartin"

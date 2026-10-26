@@ -253,20 +253,22 @@ util/               Constants · Extensions · OptimizacionBateria
 
 | Componente | Versión |
 |------------|---------|
-| Kotlin | 2.0.21 |
-| AGP | 8.5.2 |
-| KSP | 2.0.21-1.0.25 |
-| compileSdk / targetSdk | 35 |
+| Kotlin | 2.4.21 |
+| AGP | 9.4.1 |
+| Gradle | 9.8.2 |
+| KSP | 2.3.12 |
+| compileSdk | 37 |
+| targetSdk | 35 |
 | minSdk | 26 |
 | JVM target | 17 |
-| Hilt | 2.52 |
-| Room | 2.6.1 |
-| WorkManager | 2.9.1 |
-| DataStore Preferences | 1.1.1 |
-| kotlinx.serialization | 1.7.3 |
-| Coroutines | 1.9.0 |
-| Material | 1.12.0 |
-| Navigation | 2.8.2 |
+| Hilt | 2.60.1 |
+| Room | 2.8.5 |
+| WorkManager | 2.12.0 |
+| DataStore Preferences | 1.3.0 |
+| kotlinx.serialization | 1.12.0 |
+| Coroutines | 1.11.0 |
+| Material | 1.14.0 |
+| Navigation | 2.10.2 |
 | Timber | 5.0.1 |
 
 `gradle/libs.versions.toml` es la única fuente de verdad de las versiones.
@@ -280,10 +282,12 @@ sí se declara, y es el permiso central de la aplicación.
 
 ### Nota sobre la cadena de herramientas
 
-El wrapper es **Gradle 9.3.0** y AGP es **8.5.2**. La combinación compila, pero emite avisos de
-deprecación sobre APIs que desaparecen en Gradle 10, entre ellas `android.applicationVariants.all`
-—el bloque que renombra el APK de release—. No bloquea nada hoy. Antes de pasar a Gradle 10 hay
-que decidir entre subir AGP o fijar el wrapper a Gradle 8.x.
+El wrapper es **Gradle 9.8.2** y AGP es **9.4.1**, con Kotlin integrado en AGP: no hay plugin
+`kotlin-android`. La API de variantes antigua (`android.applicationVariants`) ya no existe, así
+que el renombrado del APK de release pasa por `androidComponents.onVariants` y
+`VariantOutputImpl`, que es interna de AGP: si una versión futura la cambia, el APK vuelve a
+llamarse `app-release.apk`. R8 aplica el modo completo estricto, así que las reglas `-keep` de
+clases que se instancian por reflexión piden el constructor con `{ <init>(); }`.
 
 ---
 
@@ -291,9 +295,9 @@ que decidir entre subir AGP o fijar el wrapper a Gradle 8.x.
 
 ### Requisitos previos
 
-- JDK **17 o 21**. AGP 8.5.2 no funciona con JDK 25, que es el que muchos sistemas traen por
-  defecto.
-- Android SDK con API 35.
+- JDK **25** (Temurin 25). `gradle/gradle-daemon-jvm.properties` lo exige: Gradle se niega a
+  arrancar con otro.
+- Android SDK con la plataforma 37.
 - `local.properties` con `sdk.dir`, o la variable `ANDROID_HOME` apuntando al SDK.
 
 ### Pasos
@@ -302,8 +306,8 @@ que decidir entre subir AGP o fijar el wrapper a Gradle 8.x.
 # 1. Clonar el proyecto
 git clone <url-del-repositorio> && cd SMStoSMS
 
-# 2. Apuntar al JDK correcto si el del PATH es más nuevo
-export JAVA_HOME="/ruta/al/jdk-21"
+# 2. Gradle exige el JDK 25: apunta a él si JAVA_HOME es otro
+export JAVA_HOME="/ruta/al/jdk-25"
 
 # 3. Build debug
 ./gradlew assembleDebug
